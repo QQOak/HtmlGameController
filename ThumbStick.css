@@ -1,0 +1,21 @@
+﻿
+.StickArea
+{
+    width: 310px; 
+    height: 410px;
+    /* border: 1px solid black; */
+}
+
+.OutputLabel
+{
+}
+
+
+#LeftStick {
+    float: left;
+}
+
+#RightStick {
+    float: right;
+}
+

@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>ThumbStick</title>
+	<meta charset="utf-8" />
+    <link href="ThumbStick.css" rel="stylesheet" />
+    <script src="../jquery-2.2.0.js"></script>
+    <script src="GameController.js"></script>
+    <script src="ThumbStick.js"></script>
+    <script>
+
+        "use strict";
+        $(document).ready(function () {
+
+            var $gameController = $(document).GameController({ id: 'gameController1', outputLabel: $('#GameControllerLabel') });
+                
+            $('#LeftStick').ThumbStick({ gameController: $gameController, outputLabel: $('#LeftStickLabel'), maxRadius: 150 });
+            $('#RightStick').ThumbStick({ gameController: $gameController, outputLabel: $('#RightStickLabel'), maxRadius: 150 });
+
+        });
+
+    </script>
+</head>
+<body>
+
+    <h1>Thumb Sticks</h1>
+    <div id="LeftStick" class="StickArea"><div id="xLeftStickLabel" class="OutputLabel"></div></div>
+
+    <div id="RightStick" class="StickArea"><div id="xRightStickLabel" class="OutputLabel"></div></div>
+   
+    <div id="xGameControllerLabel" class="OutputLabel"></div>
+
+
+</body>
+</html>
