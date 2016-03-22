@@ -12,6 +12,7 @@
         var settings = jQuery.extend({
             id: 'gameController1',
             outputLabel: null,
+            controllerUrl: 'gamepad.ashx'
         }, options);
 
         //Define a reference to our function myplugin which it's 
@@ -142,7 +143,7 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: 'Gamepad.ashx',
+                    url: settings.controllerUrl,
                     contentType: "Application/json; charset=utf-8",
                     dataType: "json",
                     data: JSONData,

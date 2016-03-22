@@ -4,7 +4,7 @@
     <title>ThumbStick</title>
 	<meta charset="utf-8" />
     <link href="ThumbStick.css" rel="stylesheet" />
-    <script src="../jquery-2.2.0.js"></script>
+    <script src=" jquery-2.2.0.js"></script>
     <script src="GameController.js"></script>
     <script src="ThumbStick.js"></script>
     <script>
@@ -12,7 +12,7 @@
         "use strict";
         $(document).ready(function () {
 
-            var $gameController = $(document).GameController({ id: 'gameController1', outputLabel: $('#GameControllerLabel') });
+            var $gameController = $(document).GameController({ id: 'gameController1', outputLabel: $('#GameControllerLabel'), controllerUrl: '../HtmlController.php' });
                 
             $('#LeftStick').ThumbStick({ gameController: $gameController, outputLabel: $('#LeftStickLabel'), maxRadius: 150 });
             $('#RightStick').ThumbStick({ gameController: $gameController, outputLabel: $('#RightStickLabel'), maxRadius: 150 });
@@ -28,7 +28,7 @@
 
     <div id="RightStick" class="StickArea"><div id="xRightStickLabel" class="OutputLabel"></div></div>
    
-    <div id="xGameControllerLabel" class="OutputLabel"></div>
+    <div id="GameControllerLabel" class="OutputLabel"></div>
 
 
 </body>
