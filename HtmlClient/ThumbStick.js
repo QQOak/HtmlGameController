@@ -5,6 +5,8 @@
     $.fn.ThumbStick = function (options) {
         return this.each(function () {
 
+
+
             var settings = $.extend({
                 gameController: null,
                 stickRadius: 40,
@@ -15,12 +17,26 @@
                 outputLabel: null
             }, options);
 
-            // We'll be need to reference this later
+            // We'll be need to reference "this" later
             var $this = this;
+            
+            // The stick follows the users thumbs; it graphically represents the position of the thumbsticks
+            var stick = null;
+            
+            // The range is the graphical representation of the area that the stick moves within.
+            var range = null;
+            
+            // The touch Id is the browser assigned Id for the touch event.
+            // The touch event is assigned an Id based on touch order in the window/document.
+            var touchId = null;
+            
+                        
+            // Find the central point of this element.
             var centerPosition = getCenter(this);
+            
+            
 
-
-            /// Gets the Central coordinates for an element.
+            // Calculates and returns the Central coordinates for an element as a 
             function getCenter(elem) {
                 var $elem = $(elem);
                 var pos = $elem.offset();
@@ -28,7 +44,6 @@
                 pos.left += ($elem.width() / 2);
                 pos.top += ($elem.height() / 2);
 
-                // Make integer following division
                 pos.left = Math.floor(pos.left);
                 pos.top = Math.floor(pos.top);
                 return pos;
@@ -36,12 +51,10 @@
 
 
 
-            var stick = null;
-            var range = null;
-            var touchId = null;
 
-            // Calculate the minimum and maximum x and Y coordinates for the 
-            // This does not account for the limits imposed by keeping the stick contrained with the 
+
+            // Calculate the minimum and maximum x and Y coordinates for the element
+            // This does not account for the limits imposed by keeping the stick contrained with the element
 
             stick = createStick(this, centerPosition, settings.stickRadius);
             createRange(this, centerPosition, settings.maxRadius);
@@ -55,7 +68,7 @@
                 e.preventDefault();
                 var touches = e.originalEvent.touches || e.originalEvent.changedTouches;
 
-                // The highest index touch event appears to be the latest.
+                // The highest index touch event appears to be the latest of the touch events
                 var touch = touches[touches.length - 1];
                 touchId = touch.identifier;
                 
@@ -339,14 +352,8 @@
 
             function convertRange(value, oldRangeMin, oldRangeMax, newRangeMin, NewRangeMax) {
                 // Credit to:
-                // http://stackoverflow.com/questions/929103/convert-a-number-range-to-another-range-maintaining-ratio
                 return ((value - oldRangeMin) / (oldRangeMax - oldRangeMin)) * (NewRangeMax - newRangeMin) + newRangeMin
             }
-
-
-
-
-
 
             function moveStick(elem, axes) {
                 elem.css({ left: axes.left, top: axes.top });
