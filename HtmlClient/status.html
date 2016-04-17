@@ -1,10 +1,49 @@
 <html>
 <head>
 	<title>Get getcontroller status</title>
+	
+	<script type="text/javascript" src="jquery-2.2.0.js"></script>
+	<script type="text/javascript">
+	
+		"use strict"
+		$(document).ready(function () {
+		
+			callWebService();
+			
+		});
+		
+		function ajaxResponseHandler(data) {
+			writeMessage(data);
+			callWebService();
+		}
+				
+				
+				
+		function writeMessage(message) {
+			$('#AjaxMessage').text(message);
+		}
+		
+		function callWebService() {
+			$.getJSON('../webservice/CurrentState.php', function() {
+				//alert('Success')
+			})
+			.done(function(data) {
+				ajaxResponseHandler(JSON.stringify(data));
+			})
+			.fail(function() {
+				alert('Failed to fetch data')
+			});
+		}
+		
+	</script>
+	
 </head>
 <body>
 
-	<h2>Gets the current status of stored commandss</h2>
+	<h2>Gets the current status of stored commands</h2>
+
+	<div id="AjaxMessage"></div>
+	
 
 </body>
 </html>

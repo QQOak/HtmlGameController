@@ -12,7 +12,7 @@
         "use strict";
         $(document).ready(function () {
 
-            var $gameController = $(document).GameController({ id: 'gameController1', outputLabel: $('#GameControllerLabel'), controllerUrl: '../WebService/HtmlController.php' });
+            var $gameController = $(document).GameController({ id: 'gameController1', outputLabel: $('#GameControllerLabel'), controllerUrl: '../webservice/HtmlController.php' });
                 
             $('#LeftStick').ThumbStick({ gameController: $gameController, outputLabel: $('#LeftStickLabel'), maxRadius: 150 });
             $('#RightStick').ThumbStick({ gameController: $gameController, outputLabel: $('#RightStickLabel'), maxRadius: 150 });
@@ -28,7 +28,7 @@
 
     <div id="RightStick" class="StickArea"><div id="xRightStickLabel" class="OutputLabel"></div></div>
    
-    <div id="GameControllerLabel" class="OutputLabel"></div>
+    <div id="xGameControllerLabel" class="OutputLabel"></div>
 
 
 </body>

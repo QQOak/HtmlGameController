@@ -22,6 +22,7 @@
 
         // Keep track of if we're currently awaiting a response from the server following an ajax Request
         var currentAction = false;
+        var updatePending = false;
         var values = new Array();
 
 
@@ -78,60 +79,27 @@
             },
 
 
-            //Setup our plugin functions as an object elements
-            /*
-            'setValue': function (elementId, attrib, value) {
-
-                for (var i=1; i <= values.length; i++)
-                {
-                    // see if the we already have an element with this name and 
-                    if ((values[i-1].elementId == elementId)
-                        && (values[i-1].attribute == attrib))
-                    {
-                        //alert('removing:' + elementId + ':' + attrib)
-                        values.splice(i - 1, 1);
-                    }
-                }
-
-                // now add
-                //alert('adding');
-                values[values.length] = {
-                    elementId: elementId,
-                    attribute: attrib,
-                    value: value
-                }
-
-                var msg = '';
-                for (var i = 0; i < values.length; i++)
-                {
-                    var obj = values[i]
-                    msg += '<div style="padding: 20px;">';
-                    msg += '<div>ElementId: ' + obj.elementId + '</div>';
-                    msg += '<div>Attribute: ' + obj.attribute + '</div>';
-                    msg += '<div>Value: ' + obj.value + '</div>';
-                    msg += '</div>';
-                }
-
-                output.displayOnPage(msg);
-
-
-
-                // Enable chaining
-                return output;
-            },
-            */
 
             'CsDate': function (csDate) {
                 return new Date(parseInt(csDate.substr(6)));
             },
 
 
-            'updateServer': function () {
 
-                if (!currentAction) {
+            'updateServer': function () {
+                if (!currentAction && updatePending) {
+					updatePending = false;
                     output.UpdateServer2(JSON.stringify(controllerValues));
                 };
             },
+          
+			'setUpdatePending' : function() {
+				updatePending = true;
+				output.updateServer();
+			},
+			
+			
+            
 
             'UpdateServer2': function (JSONData) {
 
@@ -148,16 +116,26 @@
                     dataType: "json",
                     data: JSONData,
                     success: function (data) {
-
-                        //settings.outputLabel.html("<div>timestamp: " + output.CsDate(data.timestamp) + "</div><div>id: " + data.id + "</div>");
                         settings.outputLabel.html("<div>"+JSON.stringify(data)+"</div>");
                         currentAction = false;
+						output.updateServer();
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        alert('Failed\n\n' + textStatus + '\n\n' + errorThrown);
+						
+						switch(errorThrown)
+						{
+							
+							case('Not Found'):
+								alert('Url Not Found\n\nThe URL specified for the controller url ('+settings.controllerUrl+') was unavailable.');
+								break;
+							default:
+								alert('Error Communicating with the Webservice\n\nStatus: ' + textStatus + '\nError Thrown: ' + errorThrown);
+								break;
+						}
+						
+                        
                     }
                 });
-
 
                 return output;
             },

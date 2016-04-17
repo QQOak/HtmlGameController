@@ -104,7 +104,7 @@
 
             $(this).bind('touchend', function (e) {
                 e.preventDefault();
-
+                
                 moveStick(stick, { left: centerPosition.left - settings.stickRadius,
                     top: centerPosition.top - settings.stickRadius
                 });
@@ -193,7 +193,8 @@
             function updateServer(id, xAxis, yAxis, direction, magnitude) 
             {
                 settings.gameController.setThumbStick(id, xAxis, yAxis, direction, magnitude);
-                settings.gameController.updateServer();
+                //settings.gameController.updateServer();
+                settings.gameController.setUpdatePending();
             }
 
 

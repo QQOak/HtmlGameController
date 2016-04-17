@@ -11,26 +11,14 @@ if(apc_exists($apcname)) {
 } else {
 	
 	# create an empty controller object for us to return
-	#print("No Controller Position Available");
-
-	#$controllerPosition = json_encode(["Hello!","Goodbye", [1, 2, 3]], JSON_FORCE_OBJECT);
 	
-	$neautralstick = array('id' => 1, 'xaxis' => 0, 'yaxis' => 0, 'direction' => 0, 'magnitude' => 0);
+	$leftStick = array('id' => 'LeftStick', 'xAxis' => 0, 'yAxis' => 0, 'direction' => 0, 'magnitude' => 0);
+	$rightStick = array('id' => 'RightStick', 'xAxis' => 0, 'yAxis' => 0, 'direction' => 0, 'magnitude' => 0);
+	$controller = array('id' => 0, 'thumbstickValues' => array('LeftStick' => $leftStick, 'RightStick' => $rightStick));
 	
-	
-	
-	$controllerPosition = json_encode($neautralstick, JSON_FORCE_OBJECT);
+	$controllerPosition = json_encode($controller, JSON_FORCE_OBJECT);
 	print($controllerPosition);
 	
-	#id
-	#xaxis
-	#yaxis
-	#direction
-	#magnitude
-	
-	
 }
-
-#var_dump($controllerPosition);
 
 ?>
