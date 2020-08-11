@@ -89,7 +89,7 @@
             'updateServer': function () {
                 if (!currentAction && updatePending) {
 					updatePending = false;
-                    output.UpdateServer2(JSON.stringify(controllerValues));
+                    //output.UpdateServer2(JSON.stringify(controllerValues));
                 };
             },
           
