@@ -1,18 +1,13 @@
 <!DOCTYPE html>
 <head>
     <title>Thumbstick Joystick</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <script src="jquery-3.5.1.js"></script>
 
     <style type="text/css">
 
-        body {
-            touch-action: none;
-        }
-
-        #gamepad
+        #leftJoystickContainer
         {
-            touch-action:none;
+            touch-action: none;
             width: 400px;
             height: 400px;
             border: 1px solid black;
@@ -20,7 +15,7 @@
             float: left;
         }
 
-        #gamepad2
+        #rightJoystickContainer
         {
             touch-action:none;
             width: 400px;
@@ -46,8 +41,8 @@
         </p>
     </p>
 
-    <div id="gamepad"></div>
-    <div id="gamepad2"></div>
+    <div id="leftJoystickContainer"></div>
+    <div id="rightJoystickContainer"></div>
 
     <script type="text/javascript">
 
@@ -98,12 +93,13 @@
         joystickPointerId = -1;
         joystickContainer = null;
 
-        var gamePageArea = $('#gamepad');
+        var gamePageArea = $('#leftJoystickContainer');
 
         var rect = gamePageArea.get(0).getBoundingClientRect();
         showPosition(rect.left, rect.top);
 
-        gamePageArea.on('pointerdown', function (e) {
+        gamePageArea.on('pointerdown', function (e)
+        {
             e.preventDefault();
 
             $('#PointerId').text(e.pointerId);
@@ -123,7 +119,8 @@
             };
         });
 
-        gamePageArea.on('pointermove', function(e) {
+        gamePageArea.on('pointermove', function(e)
+        {
             if (e.pointerId == canvasPointerId)
             {
                 moveCanvas(canvas, e.clientX, e.clientY, buttonRadius);
@@ -131,12 +128,11 @@
             }
         });
 
-        gamePageArea.on('pointerup', function(e) {
-
+        gamePageArea.on('pointerup', function(e)
+        {
             $('#PointerId2').text(e.pointerId);
             if (e.pointerId == canvasPointerId)
             {
-                
                 showPosition(-1, -1);
                 canvas.remove();
                 canvas = null;
