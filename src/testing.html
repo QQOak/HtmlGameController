@@ -30,16 +30,15 @@
 </head>
 <body>
 
-    <p>
-        <p<span>Down Pointer ID:</span><span id="PointerId"></span></p>
-        <p<span>Up Pointer ID:</span><span id="PointerId2"></span></p>
-        <p<span>Pointer Type:</span><span id="PointerType"></span></p>
-        <p>
-            Coordinates
-            <div>X: <span id="xPos">-1</span></div>
-            <div>Y: <span id="yPos">-1</span></div>
-        </p>
-    </p>
+    <div>
+        <p><span>Down Pointer ID:</span><span id="PointerId"></span></p>
+        <p><span>Up Pointer ID:</span><span id="PointerId2"></span></p>
+        <p><span>Pointer Type:</span><span id="PointerType"></span></p>
+
+        Coordinates
+        <div>X: <span id="xPos">-1</span></div>
+        <div>Y: <span id="yPos">-1</span></div>
+    </div>
 
     <div id="leftJoystickContainer"></div>
     <div id="rightJoystickContainer"></div>
@@ -85,9 +84,17 @@
             ctx.stroke(); 
         }
 
+        function createJoystickContainer(parentElement)
+        {
+            var newJoystickContainer = document.createElement("div");
+            parentElement.append(newJoystickContainer);
+            return newJoystickContainer;
+        }
+
         var buttonRadius = 50;
         var movementRange = 100;
         canvas = null;
+        joystickContainer = null;
         canvasPointerId = 0;
 
         joystickPointerId = -1;
@@ -109,7 +116,8 @@
             {
                 
                 canvasPointerId = e.pointerId;
-                canvas = createNewCanvas(gamePageArea, e.pointerId);
+                joystickContainer = createJoystickContainer(gamePageArea)
+                canvas = createNewCanvas(joystickContainer, e.pointerId);
 
                 moveCanvas(canvas, e.clientX, e.clientY, buttonRadius);
                 showPosition(e.clientX, e.clientY);

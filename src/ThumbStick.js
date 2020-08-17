@@ -1,3 +1,14 @@
+"use strict";
+
+(function ($) {
+    
+    
+    
+
+}(jQuery));
+
+    
+    
 const MovementRanges = {
     CIRCULAR: 'circular',
     SQUARE: 'square'
@@ -19,3 +30,5 @@ function GetXY(maxMagnitude, movementRange) {}
 
 
 }
+
+
