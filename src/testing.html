@@ -2,6 +2,7 @@
 <head>
     <title>Thumbstick Joystick</title>
     <script src="jquery-3.5.1.js"></script>
+    <script src="ThumbStick.js"></script>
 
     <style type="text/css">
 
@@ -44,109 +45,8 @@
     <div id="rightJoystickContainer"></div>
 
     <script type="text/javascript">
-
-        function createNewCanvas(parentElement, pointerId)
-        {
-            var newCanvas = document.createElement("canvas");
-            parentElement.append(newCanvas);
-
-            newCanvas.id = "canvas" + pointerId;
-            newCanvas.style.position = 'absolute';
-            newCanvas.style.display = 'block';
-
-            return newCanvas;
-        }
-
-        function moveCanvas(elem, xpos, ypos, radius)
-        {
-            var left = (xpos - radius);
-            elem.style.left = left + 'px';
-
-            var top = (ypos - radius);
-            elem.style.top = top + 'px';
-        }
-
-        function showPosition(xPos, yPos)
-        {
-            $("#xPos").text(xPos);
-            $("#yPos").text(yPos);
-        }
-    
-        function drawCircle(ctx, radius)
-        {   
-            var centerX = radius;
-            var centerY = radius;
-            var startAngle = 0; // Radians
-            var endAngle = 2 * Math.PI; // Radians
-
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, radius, startAngle, endAngle);
-            ctx.stroke(); 
-        }
-
-        function createJoystickContainer(parentElement)
-        {
-            var newJoystickContainer = document.createElement("div");
-            parentElement.append(newJoystickContainer);
-            return newJoystickContainer;
-        }
-
-        var buttonRadius = 50;
-        var movementRange = 100;
-        canvas = null;
-        joystickContainer = null;
-        canvasPointerId = 0;
-
-        joystickPointerId = -1;
-        joystickContainer = null;
-
-        var gamePageArea = $('#leftJoystickContainer');
-
-        var rect = gamePageArea.get(0).getBoundingClientRect();
-        showPosition(rect.left, rect.top);
-
-        gamePageArea.on('pointerdown', function (e)
-        {
-            e.preventDefault();
-
-            $('#PointerId').text(e.pointerId);
-            $('#PointerType').text(e.pointerType);
-
-            if(e.pointerType === 'touch' && canvas == null)
-            {
-                
-                canvasPointerId = e.pointerId;
-                joystickContainer = createJoystickContainer(gamePageArea)
-                canvas = createNewCanvas(joystickContainer, e.pointerId);
-
-                moveCanvas(canvas, e.clientX, e.clientY, buttonRadius);
-                showPosition(e.clientX, e.clientY);
-
-                var canvasContext = canvas.getContext("2d");
-                drawCircle(canvasContext, buttonRadius);
-            };
-        });
-
-        gamePageArea.on('pointermove', function(e)
-        {
-            if (e.pointerId == canvasPointerId)
-            {
-                moveCanvas(canvas, e.clientX, e.clientY, buttonRadius);
-                showPosition(e.clientX, e.clientY);
-            }
-        });
-
-        gamePageArea.on('pointerup', function(e)
-        {
-            $('#PointerId2').text(e.pointerId);
-            if (e.pointerId == canvasPointerId)
-            {
-                showPosition(-1, -1);
-                canvas.remove();
-                canvas = null;
-            }
-        });
-
+        $('#leftJoystickContainer').ThumbStick();
+        $('#rightJoystickContainer').ThumbStick();
     </script>
 
 </body>
