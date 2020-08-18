@@ -31,6 +31,7 @@
             padding: 10px;
         }
 
+
     </style>
 
 </head>
@@ -55,11 +56,20 @@
     <script type="text/javascript">
         $('#leftJoystickContainer').ThumbStick({
             xAxisLabel: $('#leftxPos'),
-            yAxisLabel: $('#leftyPos')
+            yAxisLabel: $('#leftyPos'),
+            showMovementLimit: true,
+            buttonRadius: 50,
+            movementLimitRadius: 100,
+            hatBorderWidth: 10,
+            hatBorderColor: '#6a809c',
+            hatFillColor: '#7596bf'
         });
         $('#rightJoystickContainer').ThumbStick({
             xAxisLabel: $('#rightxPos'),
-            yAxisLabel: $('#rightyPos')
+            yAxisLabel: $('#rightyPos'),
+            showMovementLimit: false,
+            buttonRadius: 150,
+            movementLimitRadius: 400
         });
     </script>
 

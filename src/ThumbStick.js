@@ -7,13 +7,21 @@
     
             var settings = $.extend({
                 xAxisLabel: null,
-                yAxisLabel: null
+                yAxisLabel: null,
+                showMovementLimit: true,
+                movementLimitRadius: 100,
+                hatRadius: 50,
+                hatFillColor: '#7596bf',
+                hatBorderWidth: 7,
+                hatBorderColor: '#7596bf'
             }, options);
 
+            var initialTouchLocation = {
+                x: -1,
+                y: -1
+            };
 
-            var buttonRadius = 50;
             var movementRange = 100;
-
             var canvas = null;
             var joystickContainer = null;
             var canvasPointerId = 0;
@@ -40,17 +48,32 @@
                 }
             }
 
+            function createJoystickContainer(parentElement)
+            {
+                var newJoystickContainer = document.createElement("div");
+                parentElement.append(newJoystickContainer);
+                return newJoystickContainer;
+            }
 
-            function createNewCanvas(parentElement, pointerId)
+            function createNewCanvas(parentElement, width, height)
             {
                 var newCanvas = document.createElement("canvas");
                 parentElement.append(newCanvas);
 
-                newCanvas.id = "canvas" + pointerId;
                 newCanvas.style.position = 'absolute';
                 newCanvas.style.display = 'block';
+                newCanvas.width = width;
+                newCanvas.height = height;
 
                 return newCanvas;
+            }
+
+            function drawMovementLimit(joystickContainer, xpos, ypos, radius)
+            {
+                var cont = createNewCanvas(joystickContainer, radius * 2, radius * 2);
+                moveCanvas(cont, xpos, ypos, radius);
+                var canvasContext = cont.getContext("2d");
+                drawCircle(canvasContext, radius);
             }
 
             function moveCanvas(elem, xpos, ypos, radius)
@@ -67,7 +90,7 @@
                 if(settings.xAxisLabel) settings.xAxisLabel.text(xPos);
                 if(settings.yAxisLabel) settings.yAxisLabel.text(yPos);
             }
-        
+    
             function drawCircle(ctx, radius)
             {   
                 var centerX = radius;
@@ -80,34 +103,44 @@
                 ctx.stroke(); 
             }
 
-            function createJoystickContainer(parentElement)
-            {
-                var newJoystickContainer = document.createElement("div");
-                parentElement.append(newJoystickContainer);
-                return newJoystickContainer;
-            }
+            function drawFilledCircle(ctx, radius, borderWidth, borderColor, fillColor)
+            {   
+                var centerX = radius + borderWidth;
+                var centerY = radius + borderWidth;
+                var startAngle = 0; // Radians
+                var endAngle = 2 * Math.PI; // Radians
 
-            function createJoystick(parentElemment)
-            {
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+                ctx.fillStyle = fillColor;
+                ctx.fill();
+                ctx.lineWidth = borderWidth;
+                ctx.strokeStyle = borderColor;
+                ctx.stroke(); 
             }
 
             init(this);
 
-
             $(this).on('pointerdown', function (e)
             {
                 e.preventDefault();
-                if(e.pointerType === 'touch' && canvas == null)
+                if(e.pointerType === 'touch' && joystickContainer == null)
                 {
                     canvasPointerId = e.pointerId;
+                    initialTouchLocation.x = e.clientX;
+                    initialTouchLocation.y = e.clientY;
+                    
                     joystickContainer = createJoystickContainer(this)
-                    canvas = createNewCanvas(joystickContainer, e.pointerId);
+                    if(settings.showMovementLimit) drawMovementLimit(joystickContainer, e.clientX - settings.hatBorderWidth, e.clientY - settings.hatBorderWidth, settings.movementLimitRadius);
 
-                    moveCanvas(canvas, e.clientX, e.clientY, buttonRadius);
+                    // Create hat
+                    var canvasWidth = (settings.hatRadius * 2) + (settings.hatBorderWidth * 2);
+                    var canvasHeight = canvasWidth;
+                    canvas = createNewCanvas(joystickContainer, canvasWidth, canvasHeight);
+                    moveCanvas(canvas, e.clientX - settings.hatBorderWidth, e.clientY - settings.hatBorderWidth, settings.hatRadius);
                     showPosition(e.clientX, e.clientY);
-
                     var canvasContext = canvas.getContext("2d");
-                    drawCircle(canvasContext, buttonRadius);
+                    drawFilledCircle(canvasContext, settings.hatRadius, settings.hatBorderWidth, settings.hatBorderColor, settings.hatFillColor);
                 };
             });
 
@@ -116,7 +149,7 @@
             {
                 if (e.pointerId == canvasPointerId)
                 {
-                    moveCanvas(canvas, e.clientX, e.clientY, buttonRadius);
+                    moveCanvas(canvas, e.clientX - settings.hatBorderWidth, e.clientY - settings.hatBorderWidth, settings.hatRadius);
                     showPosition(e.clientX, e.clientY);
                 }
             });
@@ -126,8 +159,8 @@
                 if (e.pointerId == canvasPointerId)
                 {
                     showPosition(-1, -1);
-                    canvas.remove();
-                    canvas = null;
+                    joystickContainer.remove();
+                    joystickContainer = null;
                 }
             });
 
