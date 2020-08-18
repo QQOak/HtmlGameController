@@ -18,6 +18,7 @@
 
         #rightJoystickContainer
         {
+            text-align: right;
             touch-action:none;
             width: 400px;
             height: 400px;
@@ -26,19 +27,30 @@
             float: right;
         }
 
+        .touchpadContainer {
+            padding: 10px;
+        }
+
     </style>
 
 </head>
 <body>
 
-    <div>
-        Coordinates
-        <div>X: <span id="xPos">-1</span></div>
-        <div>Y: <span id="yPos">-1</span></div>
+    <div class="touchpadContainer" id="leftJoystickContainer">
+        <div>
+            Coordinates
+            <div>X: <span id="leftxPos">-1</span></div>
+            <div>Y: <span id="leftyPos">-1</span></div>
+        </div>
     </div>
 
-    <div id="leftJoystickContainer"></div>
-    <div id="rightJoystickContainer"></div>
+    <div class="touchpadContainer" id="rightJoystickContainer">
+        <div>
+            Coordinates
+            <div>X: <span id="rightxPos">-1</span></div>
+            <div>Y: <span id="rightyPos">-1</span></div>
+        </div>
+    </div>
 
     <script type="text/javascript">
         $('#leftJoystickContainer').ThumbStick({

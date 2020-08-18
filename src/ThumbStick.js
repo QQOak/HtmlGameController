@@ -99,7 +99,6 @@
                 e.preventDefault();
                 if(e.pointerType === 'touch' && canvas == null)
                 {
-                    
                     canvasPointerId = e.pointerId;
                     joystickContainer = createJoystickContainer(this)
                     canvas = createNewCanvas(joystickContainer, e.pointerId);
@@ -124,7 +123,6 @@
 
             $(this).on('pointerup', function(e)
             {
-                $('#PointerId2').text(e.pointerId);
                 if (e.pointerId == canvasPointerId)
                 {
                     showPosition(-1, -1);
