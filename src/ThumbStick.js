@@ -5,6 +5,12 @@
     $.fn.ThumbStick = function (options) {
         return this.each(function () {
     
+            var settings = $.extend({
+                xAxisLabel: null,
+                yAxisLabel: null
+            }, options);
+
+
             var buttonRadius = 50;
             var movementRange = 100;
 
@@ -26,6 +32,9 @@
             function GetXY(maxMagnitude, movementRange)
             {
                 switch (movementRange) {
+                    case MovementRanges.CIRCULAR:
+                        break;
+
                     case MovementRanges.CIRCULAR:
                         break;
                 }
@@ -55,8 +64,8 @@
 
             function showPosition(xPos, yPos)
             {
-                $("#xPos").text(xPos);
-                $("#yPos").text(yPos);
+                if(settings.xAxisLabel) settings.xAxisLabel.text(xPos);
+                if(settings.yAxisLabel) settings.yAxisLabel.text(yPos);
             }
         
             function drawCircle(ctx, radius)
@@ -78,16 +87,16 @@
                 return newJoystickContainer;
             }
 
+            function createJoystick(parentElemment)
+            {
+            }
+
             init(this);
 
 
             $(this).on('pointerdown', function (e)
             {
                 e.preventDefault();
-
-                $('#PointerId').text(e.pointerId);
-                $('#PointerType').text(e.pointerType);
-
                 if(e.pointerType === 'touch' && canvas == null)
                 {
                     

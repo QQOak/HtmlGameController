@@ -32,10 +32,6 @@
 <body>
 
     <div>
-        <p><span>Down Pointer ID:</span><span id="PointerId"></span></p>
-        <p><span>Up Pointer ID:</span><span id="PointerId2"></span></p>
-        <p><span>Pointer Type:</span><span id="PointerType"></span></p>
-
         Coordinates
         <div>X: <span id="xPos">-1</span></div>
         <div>Y: <span id="yPos">-1</span></div>
@@ -45,8 +41,14 @@
     <div id="rightJoystickContainer"></div>
 
     <script type="text/javascript">
-        $('#leftJoystickContainer').ThumbStick();
-        $('#rightJoystickContainer').ThumbStick();
+        $('#leftJoystickContainer').ThumbStick({
+            xAxisLabel: $('#leftxPos'),
+            yAxisLabel: $('#leftyPos')
+        });
+        $('#rightJoystickContainer').ThumbStick({
+            xAxisLabel: $('#rightxPos'),
+            yAxisLabel: $('#rightyPos')
+        });
     </script>
 
 </body>
