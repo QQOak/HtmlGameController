@@ -13,8 +13,12 @@ const MovementRangeShapes = {
             var settings = $.extend({
                 xAxisLabel: null,
                 yAxisLabel: null,
+                movementRangeShape: MovementRangeShapes.CIRCLE,
                 showMovementLimit: true,
                 movementLimitRadius: 100,
+                movementLimitBorderWidth: 2,
+                movementLimitBorderColor: '#333333',
+                movementLimitFillColor: 'rgba(0, 0, 0, 0)',
                 hatRadius: 50,
                 hatFillColor: '#7596bf',
                 hatBorderWidth: 7,
@@ -50,7 +54,7 @@ const MovementRangeShapes = {
 
             function GetXY(maxMagnitude, movementRangeShape)
             {
-                switch (movementRangeShapoe) {
+                switch (movementRangeShape) {
                     case MovementRangeShapes.CIRCLE:
                         break;
 
@@ -79,12 +83,57 @@ const MovementRangeShapes = {
                 return newCanvas;
             }
 
-            function drawMovementLimit(joystickContainer, touchLocation, radius)
+            function drawMovementLimit(joystickContainer, touchLocation)
             {
-                var cont = createNewCanvas(joystickContainer, radius * 2, radius * 2);
-                moveCanvasByCenter(cont, touchLocation, radius);
+                switch(settings.movementRangeShape)
+                {
+                    case (MovementRangeShapes.CIRCLE):
+                        drawCircularMovementLimit(joystickContainer, touchLocation);
+                        break;
+
+                    case (MovementRangeShapes.SQUARE):
+                        drawSquareMovementLimit(joystickContainer, touchLocation);
+                        break;
+                }
+
+            }
+
+            function drawCircularMovementLimit(joystickContainer, touchLocation)
+            {
+                var canvasWidth = (settings.movementLimitRadius * 2) + (settings.movementLimitBorderWidth * 2);
+                var canvasHeight = canvasWidth;
+                var cont = createNewCanvas(joystickContainer, canvasWidth, canvasHeight);
+                moveCanvasByCenter(cont, touchLocation);
                 var canvasContext = cont.getContext("2d");
-                drawCircle(canvasContext, radius);
+                drawFilledCircle(canvasContext, settings.movementLimitRadius, settings.movementLimitBorderWidth, settings.movementLimitBorderColor, settings.movementLimitFillColor);
+            }
+
+            function drawSquareMovementLimit(joystickContainer, touchLocation)
+            {
+                var canvasWidth = (settings.movementLimitRadius * 2) + (settings.movementLimitBorderWidth * 2);
+                var canvasHeight = canvasWidth;
+                var cont = createNewCanvas(joystickContainer, canvasWidth, canvasHeight);
+                moveCanvasByCenter(cont, touchLocation);
+                var ctx = cont.getContext("2d");
+
+                ctx.beginPath();
+                ctx.rect(0, 0, canvasWidth, canvasHeight);
+                ctx.fillStyle = settings.movementLimitFillColor;
+                ctx.fill();
+                ctx.lineWidth = settings.movementLimitBorderWidth;
+                ctx.strokeStyle = settings.movementLimitBorderColor;
+                ctx.stroke(); 
+            }
+
+            function drawHat(parent, touchLocation)
+            {
+                var canvasWidth = (settings.hatRadius * 2) + (settings.hatBorderWidth * 2);
+                var canvasHeight = canvasWidth;
+                canvas = createNewCanvas(joystickContainer, canvasWidth, canvasHeight);
+
+                moveCanvasByCenter(canvas, touchLocation);
+                var canvasContext = canvas.getContext("2d");
+                drawFilledCircle(canvasContext, settings.hatRadius, settings.hatBorderWidth, settings.hatBorderColor, settings.hatFillColor);
             }
 
             function moveCanvasByCenter(elem, touchLocation)
@@ -124,16 +173,6 @@ const MovementRangeShapes = {
             //init(this);
 
 
-            function createHat(parent, touchLocation)
-            {
-                var canvasWidth = (settings.hatRadius * 2) + (settings.hatBorderWidth * 2);
-                var canvasHeight = canvasWidth;
-                canvas = createNewCanvas(joystickContainer, canvasWidth, canvasHeight);
-
-                moveCanvasByCenter(canvas, touchLocation);
-                var canvasContext = canvas.getContext("2d");
-                drawFilledCircle(canvasContext, settings.hatRadius, settings.hatBorderWidth, settings.hatBorderColor, settings.hatFillColor);
-            }
 
             $(this).on('pointerdown', function (e)
             {
@@ -146,9 +185,8 @@ const MovementRangeShapes = {
                     
                     joystickContainer = createJoystickContainer(this)
 
-                    if(settings.showMovementLimit) drawMovementLimit(joystickContainer, touchLocation, settings.movementLimitRadius);
-
-                    createHat(joystickContainer, touchLocation);
+                    if(settings.showMovementLimit) drawMovementLimit(joystickContainer, touchLocation);
+                    drawHat(joystickContainer, touchLocation);
                 };
             });
 

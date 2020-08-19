@@ -67,11 +67,13 @@
         $('#rightJoystickContainer').ThumbStick({
             xAxisLabel: $('#rightxPos'),
             yAxisLabel: $('#rightyPos'),
-            showMovementLimit: false,
+            showMovementLimit: true,
             buttonRadius: 150,
-            movementLimitRadius: 400,
+            movementLimitRadius: 100,
             hatBorderColor: '#149c32',
-            hatFillColor: '#26d14b'
+            hatFillColor: '#26d14b',
+            movementRangeShape: MovementRangeShapes.SQUARE,
+            movementLimitBorderWidth: 4
         });
     </script>
 
