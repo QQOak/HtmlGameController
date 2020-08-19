@@ -48,7 +48,7 @@ const MovementRangeShapes = {
             function init(gamePageArea)
             {
                 var rect = gamePageArea.getBoundingClientRect();
-                showPosition(rect.left, rect.top);
+                showPosition({x: rect.left, y: rect.top});
             }
 
 
@@ -143,10 +143,10 @@ const MovementRangeShapes = {
                 elem.style.top = touchLocation.y - (rect.height / 2) + 'px';
             }
 
-            function showPosition(xPos, yPos)
+            function showPosition(location)
             {
-                if(settings.xAxisLabel) settings.xAxisLabel.text(xPos);
-                if(settings.yAxisLabel) settings.yAxisLabel.text(yPos);
+                if(settings.xAxisLabel) settings.xAxisLabel.text(location.x);
+                if(settings.yAxisLabel) settings.yAxisLabel.text(location.y);
             }
 
             function drawFilledCircle(ctx, radius, borderWidth, borderColor, fillColor)
@@ -190,6 +190,10 @@ const MovementRangeShapes = {
                 };
             });
 
+            function moveHat(touchLocation)
+            {
+                moveCanvasByCenter(canvas, touchLocation);
+            }
 
             $(this).on('pointermove', function(e)
             {
@@ -197,7 +201,7 @@ const MovementRangeShapes = {
                 {
                     var touchLocation = getTouchLocation(e);
                     moveCanvasByCenter(canvas, touchLocation);
-                    showPosition(e.clientX, e.clientY);
+                    showPosition(touchLocation);
                 }
             });
 
@@ -205,7 +209,7 @@ const MovementRangeShapes = {
             {
                 if (e.pointerId == this.pointerId)
                 {
-                    showPosition(-1, -1);
+                    showPosition({x: -1, y: -1});
                     joystickContainer.remove();
                     joystickContainer = null;
                 }
