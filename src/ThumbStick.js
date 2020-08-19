@@ -23,6 +23,9 @@ const MovementRangeShapes = {
                 hatFillColor: '#7596bf',
                 hatBorderWidth: 7,
                 hatBorderColor: '#7596bf',
+                onTouchStart: function() {},
+                onMove : function() {},
+                onTouchEnd : function() {}
             }, options);
 
             var initialTouchLocation = {
@@ -44,13 +47,6 @@ const MovementRangeShapes = {
                     y: e.clientY
                 }
             }
-
-            function init(gamePageArea)
-            {
-                var rect = gamePageArea.getBoundingClientRect();
-                showPosition({x: rect.left, y: rect.top});
-            }
-
 
             function GetXY(maxMagnitude, movementRangeShape)
             {
@@ -143,12 +139,6 @@ const MovementRangeShapes = {
                 elem.style.top = touchLocation.y - (rect.height / 2) + 'px';
             }
 
-            function showPosition(location)
-            {
-                if(settings.xAxisLabel) settings.xAxisLabel.text(location.x);
-                if(settings.yAxisLabel) settings.yAxisLabel.text(location.y);
-            }
-
             function drawFilledCircle(ctx, radius, borderWidth, borderColor, fillColor)
             {   
                 var centerX = radius + borderWidth;
@@ -169,28 +159,6 @@ const MovementRangeShapes = {
             {   
                 drawFilledCircle(ctx, radius, 1, 'black', 'rgba(0, 0, 0, 0');
             }
-
-            //init(this);
-
-
-
-            $(this).on('pointerdown', function (e)
-            {
-                e.preventDefault();
-                if(e.pointerType === 'touch' && joystickContainer == null)
-                {
-                    this.pointerId = e.pointerId;
-                    var touchLocation = getTouchLocation(e);
-                    initialTouchLocation = touchLocation;
-                    
-                    joystickContainer = createJoystickContainer(this);
-
-                    if(settings.showMovementLimit) drawMovementLimit(joystickContainer, touchLocation);
-                    drawHat(joystickContainer, touchLocation);
-                };
-            });
-
-            /// 
 
             function limitRange(val, abs)
             {
@@ -235,6 +203,43 @@ const MovementRangeShapes = {
                 return { x: x, y: y };
             }
 
+            $(this).on('pointerdown', function (e)
+            {
+                e.preventDefault();
+                if(e.pointerType === 'touch' && joystickContainer == null)
+                {
+                    this.pointerId = e.pointerId;
+                    var touchLocation = getTouchLocation(e);
+                    initialTouchLocation = touchLocation;
+                    
+                    joystickContainer = createJoystickContainer(this);
+
+                    if(settings.showMovementLimit) drawMovementLimit(joystickContainer, touchLocation);
+                    drawHat(joystickContainer, touchLocation);
+
+                    var zeroInitialDeflection = {x: 0, y: 0};
+                    settings.onStart.call();
+                };
+            });
+
+            function InvertAxis(val)
+            {
+                return -val;
+            }
+
+            function scaleToRange(value, sourceRange, targetRange)
+            {
+                var scaleFactor = (value - sourceRange.min) / (sourceRange.max - sourceRange.min);
+                return scaleFactor * ( targetRange.max - targetRange.min) + targetRange.min;
+            }
+
+            function convertHatmovementToOutputValues(movementAmount, sourceRange, targetRange)
+            {
+                var x = scaleToRange(movementAmount.x, sourceRange, targetRange);
+                var y = scaleToRange(InvertAxis(movementAmount.y), sourceRange, targetRange);
+                return { x:x, y:y };
+            }
+
             $(this).on('pointermove', function(e)
             {
                 if (e.pointerId == this.pointerId)
@@ -244,7 +249,11 @@ const MovementRangeShapes = {
                     var newHatPosition = getNewHatPosition(initialTouchLocation, movementAmount);
                     
                     moveCanvasByCenter(canvas, newHatPosition);
-                    showPosition(touchLocation);
+
+                    var sourceRange = { min: -settings.movementLimitRadius, max: settings.movementLimitRadius };
+                    var targetRange = { min: -1, max: 1 };
+                    var values = convertHatmovementToOutputValues(movementAmount, sourceRange, targetRange);
+                    settings.onMove.call(values);
                 }
             });
 
@@ -252,9 +261,9 @@ const MovementRangeShapes = {
             {
                 if (e.pointerId == this.pointerId)
                 {
-                    showPosition({x: -1, y: -1});
                     joystickContainer.remove();
                     joystickContainer = null;
+                    settings.onEnd.call();
                 }
             });
 

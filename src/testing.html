@@ -55,26 +55,46 @@
 
     <script type="text/javascript">
         $('#leftJoystickContainer').ThumbStick({
-            xAxisLabel: $('#leftxPos'),
-            yAxisLabel: $('#leftyPos'),
             showMovementLimit: true,
             movementLimitRadius: 100,
             buttonRadius: 50,
             hatBorderWidth: 10,
             hatBorderColor: '#9c1434',
             hatFillColor: '#d4113e', 
-            movementRangeShape: MovementRangeShapes.CIRCLE
+            movementRangeShape: MovementRangeShapes.CIRCLE,
+            onStart : function() {
+                $('#leftxPos').text('0');
+                $('#leftyPos').text('0');
+            },
+            onMove : function() {
+                $('#leftxPos').text(this.x);
+                $('#leftyPos').text(this.y);
+            },
+            onEnd : function() {
+                $('#leftxPos').text('0');
+                $('#leftyPos').text('0');
+            }
         });
         $('#rightJoystickContainer').ThumbStick({
-            xAxisLabel: $('#rightxPos'),
-            yAxisLabel: $('#rightyPos'),
             showMovementLimit: true,
             buttonRadius: 150,
             movementLimitRadius: 100,
             hatBorderColor: '#149c32',
             hatFillColor: '#26d14b',
             movementRangeShape: MovementRangeShapes.SQUARE,
-            movementLimitBorderWidth: 4
+            movementLimitBorderWidth: 4,
+            onStart : function() {
+                $('#rightxPos').text('0');
+                $('#rightyPos').text('0');
+            },
+            onMove : function() {
+                $('#rightxPos').text(this.x);
+                $('#rightyPos').text(this.y);
+            },
+            onEnd : function() {
+                $('#rightxPos').text('0');
+                $('#rightyPos').text('0');
+            }
         });
     </script>
 
