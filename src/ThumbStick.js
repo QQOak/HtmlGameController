@@ -6,27 +6,11 @@ const MovementRangeShapes = {
 };
 
 (function ($) {
-    
+
     $.fn.ThumbStick = function (options) {
         return this.each(function () {
     
-            var settings = $.extend({
-                xAxisLabel: null,
-                yAxisLabel: null,
-                movementRangeShape: MovementRangeShapes.CIRCLE,
-                showMovementLimit: true,
-                movementLimitRadius: 100,
-                movementLimitBorderWidth: 2,
-                movementLimitBorderColor: '#333333',
-                movementLimitFillColor: 'rgba(0, 0, 0, 0)',
-                hatRadius: 50,
-                hatFillColor: '#7596bf',
-                hatBorderWidth: 7,
-                hatBorderColor: '#7596bf',
-                onTouchStart: function() {},
-                onMove : function() {},
-                onTouchEnd : function() {}
-            }, options);
+            var settings = $.extend( {}, $.fn.ThumbStick.defaults, options);
 
             var initialTouchLocation = {
                 x: -1,
@@ -270,6 +254,23 @@ const MovementRangeShapes = {
 
 
         });
+    };
+
+    $.fn.ThumbStick.defaults = {
+        hatRadius: 50,
+        movementLimitRadius: 100,
+        movementRangeShape: MovementRangeShapes.CIRCLE,
+        showMovementLimit: true,
+        movementLimitRadius: 100,
+        movementLimitBorderWidth: 2,
+        movementLimitBorderColor: '#333333',
+        movementLimitFillColor: 'rgba(0, 0, 0, 0)',
+        hatFillColor: '#7596bf',
+        hatBorderWidth: 7,
+        hatBorderColor: '#7596bf',
+        onTouchStart: function() {},
+        onMove : function() {},
+        onTouchEnd : function() {}
     };
 
 }(jQuery));
