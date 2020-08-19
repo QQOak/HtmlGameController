@@ -191,10 +191,38 @@ const MovementRangeShapes = {
             });
 
             /// 
+
+            function limitRange(val, abs)
+            {
+                return val < 0-abs ? 0-abs : (val > abs ? abs : val);
+            }
+
+            function limitMagnitude(val, max)
+            {
+                return val < max ? val : max;
+            }
+
             function getHatDeflection(initialTouchLocation, currentTouchLocation) 
             {
                 var x = currentTouchLocation.x - initialTouchLocation.x;
                 var y = currentTouchLocation.y - initialTouchLocation.y;
+
+                switch(settings.movementRangeShape)
+                {
+                    case(MovementRangeShapes.SQUARE):
+                        x = limitRange(x, settings.movementLimitRadius);
+                        y = limitRange(y, settings.movementLimitRadius);
+                        break;
+
+                    case(MovementRangeShapes.CIRCLE):
+                        var theta = Math.atan2(y, x);
+                        var magnitude = Math.hypot(Math.abs(x), Math.abs(y));
+                        magnitude = limitMagnitude(magnitude, settings.movementLimitRadius);
+
+                        x = Math.cos(theta) * magnitude;
+                        y = Math.sin(theta) * magnitude;
+                        break;
+                }
 
                 return { x: x, y: y };
             }
