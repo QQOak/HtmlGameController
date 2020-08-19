@@ -8,27 +8,22 @@
 
         #leftJoystickContainer
         {
-            touch-action: none;
-            width: 600px;
-            height: 600px;
-            border: 1px solid black;
-            background-color: burlywood;
             float: left;
         }
 
         #rightJoystickContainer
         {
             text-align: right;
-            touch-action:none;
-            width: 600px;
-            height: 600px;
-            border: 1px solid black;
-            background-color: burlywood;
             float: right;
         }
 
         .touchpadContainer {
             padding: 10px;
+            width: 600px;
+            height: 600px;
+            touch-action: none;
+            border: 1px solid black;
+            background-color: burlywood;
         }
 
     </style>
@@ -77,6 +72,7 @@
 
         $.fn.ThumbStick.defaults.hatRadius = 100;
         $.fn.ThumbStick.defaults.hatBorderWidth = 10;
+        $.fn.ThumbStick.defaults.movementLimitRadius = 150;
 
         $('#leftJoystickContainer').ThumbStick({
             hatBorderColor: '#9c1434',

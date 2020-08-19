@@ -10,7 +10,7 @@ const MovementRangeShapes = {
     $.fn.ThumbStick = function (options) {
         return this.each(function () {
     
-            var settings = $.extend( {}, $.fn.ThumbStick.defaults, options);
+            var settings = $.extend(true, {}, $.fn.ThumbStick.defaults, options);
 
             var initialTouchLocation = {
                 x: -1,
@@ -235,8 +235,7 @@ const MovementRangeShapes = {
                     moveCanvasByCenter(canvas, newHatPosition);
 
                     var sourceRange = { min: -settings.movementLimitRadius, max: settings.movementLimitRadius };
-                    var targetRange = { min: -1, max: 1 };
-                    var values = convertHatmovementToOutputValues(movementAmount, sourceRange, targetRange);
+                    var values = convertHatmovementToOutputValues(movementAmount, sourceRange, settings.outputRange);
                     settings.onMove.call(values);
                 }
             });
@@ -258,16 +257,16 @@ const MovementRangeShapes = {
 
     $.fn.ThumbStick.defaults = {
         hatRadius: 50,
-        movementLimitRadius: 100,
-        movementRangeShape: MovementRangeShapes.CIRCLE,
+        hatFillColor: '#7596bf',
+        hatBorderWidth: 7,
+        hatBorderColor: '#7596bf',
         showMovementLimit: true,
+        movementRangeShape: MovementRangeShapes.CIRCLE,
         movementLimitRadius: 100,
         movementLimitBorderWidth: 2,
         movementLimitBorderColor: '#333333',
         movementLimitFillColor: 'rgba(0, 0, 0, 0)',
-        hatFillColor: '#7596bf',
-        hatBorderWidth: 7,
-        hatBorderColor: '#7596bf',
+        outputRange: { min: -1, max: 1 },
         onTouchStart: function() {},
         onMove : function() {},
         onTouchEnd : function() {}
