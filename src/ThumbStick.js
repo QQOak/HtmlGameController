@@ -183,16 +183,28 @@ const MovementRangeShapes = {
                     var touchLocation = getTouchLocation(e);
                     initialTouchLocation = touchLocation;
                     
-                    joystickContainer = createJoystickContainer(this)
+                    joystickContainer = createJoystickContainer(this);
 
                     if(settings.showMovementLimit) drawMovementLimit(joystickContainer, touchLocation);
                     drawHat(joystickContainer, touchLocation);
                 };
             });
 
-            function moveHat(touchLocation)
+            /// 
+            function getHatDeflection(initialTouchLocation, currentTouchLocation) 
             {
-                moveCanvasByCenter(canvas, touchLocation);
+                var x = currentTouchLocation.x - initialTouchLocation.x;
+                var y = currentTouchLocation.y - initialTouchLocation.y;
+
+                return { x: x, y: y };
+            }
+
+            function getNewHatPosition(initialHatPosition, deflection)
+            {
+                var x = initialTouchLocation.x + deflection.x;
+                var y = initialTouchLocation.y + deflection.y;
+
+                return { x: x, y: y };
             }
 
             $(this).on('pointermove', function(e)
@@ -200,7 +212,10 @@ const MovementRangeShapes = {
                 if (e.pointerId == this.pointerId)
                 {
                     var touchLocation = getTouchLocation(e);
-                    moveCanvasByCenter(canvas, touchLocation);
+                    var movementAmount = getHatDeflection(initialTouchLocation, touchLocation);
+                    var newHatPosition = getNewHatPosition(initialTouchLocation, movementAmount);
+                    
+                    moveCanvasByCenter(canvas, newHatPosition);
                     showPosition(touchLocation);
                 }
             });
