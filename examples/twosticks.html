@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <head>
     <title>Thumbstick Joystick</title>
-    <script src="jquery-3.5.1.js"></script>
-    <script src="ThumbStick.js"></script>
+    <script src="../scripts/jquery-3.5.1.js"></script>
+    <script src="../src/ThumbStick.js"></script>
 
     <style type="text/css">
 
@@ -70,14 +70,13 @@
             updateLabels($RightxPos, $RightyPos, values);
         }
 
-        $.fn.ThumbStick.defaults.hatRadius = 100;
+        $.fn.ThumbStick.defaults.hatRadius = 50;
         $.fn.ThumbStick.defaults.hatBorderWidth = 10;
         $.fn.ThumbStick.defaults.movementLimitRadius = 150;
 
         $('#leftJoystickContainer').ThumbStick({
             hatBorderColor: '#9c1434',
             hatFillColor: '#d4113e', 
-            movementRangeShape: MovementRangeShapes.CIRCLE,
             onStart : function() {
                 updateLeftLabels({x:0, y:0});
             },
@@ -94,6 +93,7 @@
             hatFillColor: '#26d14b',
             movementRangeShape: MovementRangeShapes.SQUARE,
             movementLimitBorderWidth: 4,
+            outputRange: { min: -1024, max: 1024 },
             onStart : function() {
                 updateRightLabels({x:0, y:0});
             },
